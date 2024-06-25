@@ -1,11 +1,29 @@
 import { TProduct } from "@/app/type";
+import { Dispatch, SetStateAction } from "react";
 
 export default function Category({
   title,
   categories,
+  setSelectedCategory,
+  selectedCategory,
 }: {
   title: string;
   categories: { label: string; products: TProduct[] }[];
+  selectedCategory:
+    | {
+        label: string;
+        products: TProduct[];
+      }
+    | undefined;
+  setSelectedCategory: Dispatch<
+    SetStateAction<
+      | {
+          label: string;
+          products: TProduct[];
+        }
+      | undefined
+    >
+  >;
 }) {
   return (
     <div className="px-2">
@@ -13,12 +31,15 @@ export default function Category({
         {title}({categories.length})
       </h2>
       <ul className="space-y-3 capitalize mt-3 ">
-        {categories.map((category) => (
+        {categories.map((category, index) => (
           <li
-            key={category.label}
-            className="cursor-pointer flex justify-between"
+            key={category.label + "_" + index}
+            className={`cursor-pointer flex justify-between ${
+              selectedCategory?.label === category.label ? "text-green-500" : ""
+            }`}
+            onClick={() => setSelectedCategory(category)}
           >
-            <p>{category.label}</p>
+            <p className="text-inherit">{category.label}</p>
             <span>
               (<strong>{category.products.length}</strong>)
             </span>

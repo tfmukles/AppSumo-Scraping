@@ -12,6 +12,7 @@ export default function Product(product: TProduct) {
     price,
     card_description,
     taxonomy,
+    dates,
   } = product;
 
   return (
@@ -31,19 +32,28 @@ export default function Product(product: TProduct) {
           src={media_url}
           alt={"product-img"}
         />
-        <p className="text-2xl text-center font-semibold mt-3">
-          {public_name}
-          <sup className="text-sm font-normal">(${price})</sup>
+      </TableCell>
+      <TableCell>
+        <p>{public_name}</p>
+      </TableCell>
+      <TableCell>
+        <p>${price}</p>
+      </TableCell>
+      <TableCell>
+        <p>{new Date(dates.start_date).toLocaleString()}</p>
+      </TableCell>
+      <TableCell>
+        <p>{card_description}</p>
+      </TableCell>
+      <TableCell>
+        <p className="whitespace-nowrap">
+          {taxonomy.category?.value_enumeration}
         </p>
       </TableCell>
       <TableCell>
-        <p className="text-lg font-medium">{card_description}</p>
-      </TableCell>
-      <TableCell className="text-lg font-medium whitespace-nowrap">
-        <p>{taxonomy.category?.value_enumeration}</p>
-      </TableCell>
-      <TableCell className="text-lg font-medium whitespace-nowrap">
-        <p>{taxonomy.subcategory?.value_enumeration}</p>
+        <p className="whitespace-nowrap">
+          {taxonomy.subcategory?.value_enumeration}
+        </p>
       </TableCell>
     </TableRow>
   );
