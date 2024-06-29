@@ -35,7 +35,10 @@ export default function Category({
           <li
             key={category.label + "_" + index}
             className={`cursor-pointer flex justify-between ${
-              selectedCategory?.label === category.label ? "text-green-500" : ""
+              selectedCategory?.label === category.label &&
+              selectedCategory !== undefined
+                ? "text-green-500"
+                : ""
             }`}
             onClick={() => setSelectedCategory(category)}
           >

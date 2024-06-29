@@ -25,9 +25,8 @@ export default function Home() {
   }>();
 
   const filteredProducts = selectedCategory?.products || products;
-
   return (
-    <div className="container mx-auto max-w-[1800px]">
+    <div className="container mx-auto max-w-[2100px] w-full">
       <div className="row g-4">
         <div className="col-2">
           <div className="space-y-4 sticky top-0 left-0 max-h-screen overflow-y-auto py-5 px-3">
@@ -47,7 +46,7 @@ export default function Home() {
             />
           </div>
         </div>
-        <div className="col-9">
+        <div className="col-10">
           {/* @ts-ignore */}
           <TableProduct products={filteredProducts} />
         </div>
@@ -62,13 +61,17 @@ const TableProduct = ({ products = [] }: { products: TProduct[] }) => {
       <TableCaption>List of product from Appsumo.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[250px]">Image</TableHead>
+          <TableHead className="min-w-[150px]">Image</TableHead>
           <TableHead className="w-[300px]">Name</TableHead>
           <TableHead>Price</TableHead>
           <TableHead>Start Date</TableHead>
-          <TableHead>Description</TableHead>
+          <TableHead className="min-w-[400px]">Description</TableHead>
           <TableHead>Category</TableHead>
           <TableHead>Sub Category</TableHead>
+          <TableHead>Best For</TableHead>
+          <TableHead>Alternative To</TableHead>
+          <TableHead>Comments</TableHead>
+          <TableHead>Reviews</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
