@@ -3,8 +3,6 @@
 import { TProduct } from "@/app/type";
 import { TableCell, TableRow } from "@/components/ui/table";
 import Image from "next/image";
-import { useState } from "react";
-import { useInView } from "react-intersection-observer";
 export default function Product(product: TProduct) {
   const {
     id,
@@ -16,38 +14,12 @@ export default function Product(product: TProduct) {
     taxonomy,
     dates,
     attributes,
+    commentsTotal,
+    reviewsTotal,
   } = product;
-
-  const [questions, setQuestions] = useState();
-  const [reviews, setReviews] = useState();
-
-  const { ref } = useInView({
-    threshold: 0.5,
-    onChange: async (inView) => {
-      if (inView) {
-        // fetch the products if it's in the viewport
-        if (!questions) {
-          const response = await fetch(
-            `https://appsumo.com/api/v2/deals/${id}/questions/?page=1&sort=latest&order=desc&from=0&items_per_page=5`
-          );
-          const data = await response.json();
-          setQuestions(data.meta.total);
-        }
-      }
-
-      if (!reviews) {
-        const response = await fetch(
-          `https://appsumo.com/api/v2/deals/${id}/reviews/?page=1&sort=date&order=desc&from=0&items_per_page=5`
-        );
-        const data = await response.json();
-        setReviews(data.meta.total);
-      }
-    },
-  });
 
   return (
     <TableRow
-      ref={ref}
       key={id}
       className="cursor-pointer"
       onClick={() => {
@@ -95,10 +67,10 @@ export default function Product(product: TProduct) {
         </p>
       </TableCell>
       <TableCell>
-        <p className="whitespace-nowrap">{questions}</p>
+        <p className="whitespace-nowrap">{commentsTotal}</p>
       </TableCell>
       <TableCell>
-        <p className="whitespace-nowrap">{reviews}</p>
+        <p className="whitespace-nowrap">{reviewsTotal}</p>
       </TableCell>
     </TableRow>
   );

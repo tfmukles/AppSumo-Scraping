@@ -15,16 +15,46 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getCategories } from "@/lib/getCategory";
-import { useState } from "react";
+import { Dispatch, useMemo, useState } from "react";
+
+type TSort = {
+  type: "comments" | "reviews";
+  order: -1 | 1;
+};
 
 export default function Home() {
-  const { categories, subCategories } = getCategories();
+  const [sortBy, setSortBy] = useState<TSort>({ type: "comments", order: 1 });
+
+  const { categories, subCategories } = useMemo(() => {
+    return getCategories();
+  }, []);
   const [selectedCategory, setSelectedCategory] = useState<{
     label: string;
     products: TProduct[];
   }>();
+  console.log(sortBy);
 
-  const filteredProducts = selectedCategory?.products || products;
+  const filteredProducts = (selectedCategory?.products || products).toSorted(
+    (a, b) => {
+      if (sortBy.type === "comments") {
+        if (sortBy.order === 1) {
+          return a.commentsTotal - b.commentsTotal;
+        }
+
+        return b.commentsTotal - a.commentsTotal;
+      }
+
+      if (sortBy.type === "reviews") {
+        if (sortBy.order === 1) {
+          return a.reviewsTotal - b.reviewsTotal;
+        }
+        return b.reviewsTotal - a.reviewsTotal;
+      }
+
+      return 0;
+    }
+  );
+
   return (
     <div className="container mx-auto max-w-[2100px] w-full">
       <div className="row g-4">
@@ -47,37 +77,80 @@ export default function Home() {
           </div>
         </div>
         <div className="col-10">
-          {/* @ts-ignore */}
-          <TableProduct products={filteredProducts} />
+          <TableProduct
+            // key={sortBy.type}
+            setSortBy={setSortBy}
+            sortBy={sortBy}
+            // @ts-ignore
+            products={filteredProducts}
+          />
         </div>
       </div>
     </div>
   );
 }
 
-const TableProduct = ({ products = [] }: { products: TProduct[] }) => {
+const TableProduct = ({
+  products = [],
+  setSortBy,
+  sortBy,
+}: {
+  products: TProduct[];
+  sortBy: TSort;
+  setSortBy: Dispatch<TSort>;
+}) => {
   return (
-    <Table className="">
+    <Table>
       <TableCaption>List of product from Appsumo.</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="min-w-[150px]">Image</TableHead>
-          <TableHead className="w-[300px]">Name</TableHead>
+          <TableHead>Name</TableHead>
           <TableHead>Price</TableHead>
           <TableHead>Start Date</TableHead>
-          <TableHead className="min-w-[400px]">Description</TableHead>
+          <TableHead className="min-w-[350px]">Description</TableHead>
           <TableHead>Category</TableHead>
           <TableHead>Sub Category</TableHead>
-          <TableHead>Best For</TableHead>
+          <TableHead className="max-w-40">Best For</TableHead>
           <TableHead>Alternative To</TableHead>
-          <TableHead>Comments</TableHead>
-          <TableHead>Reviews</TableHead>
+          <TableHead
+            onClick={() => {
+              setSortBy({
+                type: "comments",
+                order:
+                  sortBy.type === "comments"
+                    ? sortBy.order === -1
+                      ? 1
+                      : -1
+                    : 1,
+              });
+            }}
+            className="flex items-center space-x-2"
+          >
+            <span>Comments</span>
+          </TableHead>
+          <TableHead
+            onClick={() =>
+              setSortBy({
+                type: "reviews",
+                order:
+                  sortBy.type === "reviews"
+                    ? sortBy.order === -1
+                      ? 1
+                      : -1
+                    : 1,
+              })
+            }
+            className="min-w-[150px]"
+          >
+            <span>Reviews</span>
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {products.map((product, index) => (
           // @ts-ignore
-          <Product key={product.id + index} {...product} />
+          <Product {...product} key={index} />
         ))}
       </TableBody>
       <TableFooter>

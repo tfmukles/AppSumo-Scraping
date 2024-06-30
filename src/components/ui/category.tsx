@@ -31,23 +31,29 @@ export default function Category({
         {title}({categories.length})
       </h2>
       <ul className="space-y-3 capitalize mt-3 ">
-        {categories.map((category, index) => (
-          <li
-            key={category.label + "_" + index}
-            className={`cursor-pointer flex justify-between ${
-              selectedCategory?.label === category.label &&
-              selectedCategory !== undefined
-                ? "text-green-500"
-                : ""
-            }`}
-            onClick={() => setSelectedCategory(category)}
-          >
-            <p className="text-inherit">{category.label}</p>
-            <span>
-              (<strong>{category.products.length}</strong>)
-            </span>
-          </li>
-        ))}
+        {categories.map((category, index) => {
+          if (!category.label) {
+            return null;
+          }
+
+          return (
+            <li
+              key={category.label + "_" + index}
+              className={`cursor-pointer flex justify-between ${
+                selectedCategory?.label === category.label &&
+                selectedCategory !== undefined
+                  ? "text-green-500"
+                  : ""
+              }`}
+              onClick={() => setSelectedCategory(category)}
+            >
+              <p className="text-inherit">{category.label}</p>
+              <span>
+                (<strong>{category.products.length}</strong>)
+              </span>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

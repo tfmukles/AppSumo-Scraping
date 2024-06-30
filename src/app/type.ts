@@ -85,4 +85,6 @@ export interface TProduct {
   rgb_background_color: string;
   total_votes_count: number;
   has_user_voted: boolean;
+  commentsTotal: number;
+  reviewsTotal: number;
 }
