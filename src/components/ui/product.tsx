@@ -43,7 +43,19 @@ export default function Product(product: TProduct) {
         <p>${price}</p>
       </TableCell>
       <TableCell>
-        <p>{new Date(dates.start_date).toLocaleString()}</p>
+        <p className="whitespace-nowrap">{commentsTotal}</p>
+      </TableCell>
+      <TableCell>
+        <p className="whitespace-nowrap">{reviewsTotal}</p>
+      </TableCell>
+      <TableCell>
+        <p>
+          {new Date(dates.start_date).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          })}
+        </p>
       </TableCell>
       <TableCell>
         <p>{card_description}</p>
@@ -65,12 +77,6 @@ export default function Product(product: TProduct) {
         <p className="whitespace-nowrap">
           {attributes.alternative_to?.join(", ")}
         </p>
-      </TableCell>
-      <TableCell>
-        <p className="whitespace-nowrap">{commentsTotal}</p>
-      </TableCell>
-      <TableCell>
-        <p className="whitespace-nowrap">{reviewsTotal}</p>
       </TableCell>
     </TableRow>
   );
